@@ -3,19 +3,30 @@ using UnityEngine;
 public class EnemyLaser : MonoBehaviour
 {
     public float range = 4f;
+    public float speed = 3f;
     
-    public bool EnableRay;
-
     public GameObject player;
+    private bool EnableRay = false;
 
     void Start()
     {
-        GetComponent<SphereCollider>().radius = range;
+        if(GetComponent<SphereCollider>() != null)
+        {
+            GetComponent<SphereCollider>().radius = range;
+        }
+
     }
 
     void Update()
     {
-        
+        if(EnableRay && player != null)
+        {
+
+            Vector3 direction = (player.transform.position - transform.position).normalized;
+            transform.position += direction * speed * Time.deltaTime;
+            transform.LookAt(new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z));
+
+        }
     }
 
     public void OnTriggerEnter(Collider other)
@@ -34,6 +45,15 @@ public class EnemyLaser : MonoBehaviour
         {
             EnableRay = false;
             print("Player Exit");
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("Mencho Murio");
+            Destroy(gameObject);
         }
     }
 

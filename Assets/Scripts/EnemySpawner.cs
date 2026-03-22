@@ -5,7 +5,6 @@ public class EnemySpawner : MonoBehaviour
     public GameObject EnemyPrefab;
     public float range = 10f;
     public float spawnInterval = 2f;
-    public float enemyCount = 0f;
     public float LimitEmeny = 5f;
     public bool EnableSpawner;
 
@@ -13,28 +12,42 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
-        GetComponent<SphereCollider>().radius = range;
+        if(GetComponent<SphereCollider>() != null)
+        {
+            GetComponent<SphereCollider>().radius = range;
+        }
+
     }
     void Update()
     {
-        if (EnableSpawner)
+        if (EnableSpawner && EnemyPrefab != null)
         {
             counter += Time.deltaTime;
-            if (counter > spawnInterval)
-            {
-                SpawnEnemy();
-                counter = 0f;
-                enemyCount++;
 
-                if (enemyCount == LimitEmeny)
+            if(counter > spawnInterval)
+            {
+                int EnemyCheck = GameObject.FindGameObjectsWithTag("Enemy").Length;
+
+                if(EnemyCheck < LimitEmeny)
                 {
-                    EnableSpawner = false;
-                    print("Enemy Limit Reach");
+                    SpawnEnemy();
+                    counter = 0f;
                 }
             }
-
         }
     }
+
+    public void SpawnEnemy()
+    {
+        GameObject obj = Instantiate(EnemyPrefab, transform);
+
+        Vector3 origin = transform.position;
+        Vector3 dir = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
+        Vector3 FinalPosition = origin + dir * Random.Range(0, range);
+
+        obj.transform.position = FinalPosition;
+    }
+
     public void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player"))
@@ -48,7 +61,7 @@ public class EnemySpawner : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             EnableSpawner = false;
-            print("Player Exit");
+            print("Saliendo del País");
         }
     }
 
@@ -58,14 +71,4 @@ public class EnemySpawner : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, range);
     }
 
-    public void SpawnEnemy()
-    {
-        GameObject obj = Instantiate(EnemyPrefab, transform);
-
-        Vector3 origin = transform.position;
-        Vector3 dir = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
-        Vector3 FinalPosition = origin + dir * Random.Range(0, range);
-
-        obj.transform.position = FinalPosition;
-    }
 }
