@@ -35,7 +35,6 @@ public class EnemyLaser : MonoBehaviour
         {
             EnableRay = true;
             player = other.gameObject;
-            print("Player Entered");
 
         }
     }
@@ -44,7 +43,6 @@ public class EnemyLaser : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             EnableRay = false;
-            print("Player Exit");
         }
     }
 

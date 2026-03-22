@@ -53,7 +53,7 @@ public class EnemySpawner : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             EnableSpawner = true;
-            print("Player Entered");
+            print("Modo Bienestar Activado");
         }
     }
     private void OnTriggerExit(Collider other)
