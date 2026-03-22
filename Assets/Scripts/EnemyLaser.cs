@@ -67,7 +67,5 @@ public class EnemyLaser : MonoBehaviour
             Vector3 dir = (playerpos - transform.position);
             Gizmos.DrawRay(transform.position, dir );
         }
-      
-        // Gizmos.DrawWireSphere(transform.position, rangeChase);
     }
 }
